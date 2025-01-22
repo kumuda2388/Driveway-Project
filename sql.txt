@@ -1,3 +1,5 @@
+Database queries used in the project
+
 Queries to create tables:
 
 CREATE TABLE users (
@@ -80,8 +82,7 @@ CREATE TABLE BillNegotiation (
     FOREIGN KEY (BillID) REFERENCES Bills(BillID) -- Assuming Quotes table has 'quote_id' as primary key
 );
 
-__________________________________________________
-All the queries we have used in the project and all details on what these queries are doing is in dbservice.js file:
+queries used in the project to insert , update and extract data from the database
 
 SELECT * FROM users WHERE email = ?
 
@@ -142,8 +143,8 @@ SELECT o.Order_ID, o.Quote_Id, o.Price, o.start_Date, o.End_Date, o.status FROM 
 UPDATE Orders SET  Status = ? WHERE Order_ID = ?;
 
 INSERT INTO Bills (Order_ID, Price, Status, Payment_date, Due_Date) VALUES (?, ?, ?, NULL, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY))
-______________________________________
-DashBoard Queries:
+
+Contractor DashBoard Queries:
 
 Big Clients:
 
