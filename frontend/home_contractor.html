@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="home_contractor.js" defer></script> <!-- External JavaScript -->
+</head>
+<body>
+    <div class="container">
+    <!-- Link to logout (which would clear session data or redirect to login in a real app) -->
+     <header>
+    <button id="logoutBtn">Logout</button></header>
+        <br><br>
+        <button id="dashboard" onclick="window.location.href='cont_dashboard.html'">Dashboard</button>
+        <br><br>
+        <!-- Other buttons with inline navigation -->
+        <button id="submitted_requests" onclick="window.location.href='cont_submitted_requests.html'">Submitted Requests</button>
+        <br><br>
+        <button id="quotes_generated" onclick="window.location.href='cont_quotes_generated.html'">Quotes Generated</button>
+        <br><br>
+        <button id="orders_generated" onclick="window.location.href='cont_orders_generated.html'">Orders Generated</button>
+        <br><br>
+        <button id="bills_generated" onclick="window.location.href='cont_bills_generated.html'">Bills Generated</button>
+        <br><br>
+    </div>
+
+</body>
+</html>

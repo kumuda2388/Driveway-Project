@@ -1,0 +1,178 @@
+Queries to create tables:
+
+CREATE TABLE users (
+    user_id CHAR(36) PRIMARY KEY,                 -- User ID (UUID format, unique identifier)
+    first_name VARCHAR(255) NOT NULL,             -- First name (required field)
+    last_name VARCHAR(255) NOT NULL,              -- Last name (required field)
+    email VARCHAR(255) NOT NULL UNIQUE,           -- Email (unique, used as identifier)
+    password VARCHAR(255) NOT NULL,               -- Password (hashed in real-world apps)
+    address VARCHAR(255) NOT NULL,                -- Address (optional, can be null or blank)
+    card_name VARCHAR(255) NOT NULL,              -- Name on the credit card (required)
+    card_number CHAR(16) NOT NULL,                -- Credit card number (16 digits, stored as CHAR for validation)
+    expiry_date CHAR(5) NOT NULL,                 -- Expiry date (MM/YY format, stored as CHAR)
+    cvv CHAR(3) NOT NULL,                         -- CVV (3 digits, stored as CHAR)
+    phone_number VARCHAR(16) NOT NULL,            -- Phone number (can include international code)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp of user registration (auto-generated)
+);
+
+CREATE TABLE SubmitRequest (
+    Submitrequest_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Address VARCHAR(255) NOT NULL,
+    Square_Feet INT NOT NULL,
+    Price_Dollars DECIMAL(10, 2) NOT NULL,
+    Driveway_Pictures varchar(2083) NULL,
+    Note TEXT DEFAULT NULL,
+    Tracking_Status ENUM('Requested', 'Accepted', 'Rejected') DEFAULT 'Requested',
+    Note_from_contractor TEXT DEFAULT NULL,
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id CHAR(36) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE Quotes (
+    Quote_ID INT AUTO_INCREMENT PRIMARY KEY,  -- Auto-generated primary key for each quote
+    Price DECIMAL(10, 2) NOT NULL,            -- Price of the quote
+    Start_Period DATE NOT NULL,               -- Start date for the quote's validity
+    End_Period DATE NOT NULL,                 -- End date for the quote's validity
+    Submitrequest_ID INT,                     -- Foreign key to the SubmitRequest table
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- Timestamp for when quote is created or updated
+    Status ENUM('Sent', 'Accepted', 'Quit') DEFAULT 'Sent',  -- Status of the quote (Sent, Accepted, Quit)
+    FOREIGN KEY (Submitrequest_ID) REFERENCES SubmitRequest(Submitrequest_ID)  -- Foreign key constraint
+);
+
+CREATE TABLE QuoteNegotiation (
+    sl_no INT AUTO_INCREMENT PRIMARY KEY,        -- Auto-incrementing primary key (Sl. No)
+    note_message_details TEXT NOT NULL,           -- Note/Message Details (can be of variable length)
+    quote_id INT,                                -- Foreign key (Quote ID)
+    sender VARCHAR(255) NOT NULL,                 -- Sender of the message (e.g., User, Admin, etc.)
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp (auto-generated on insert)
+    FOREIGN KEY (quote_id) REFERENCES Quotes(quote_id) -- Assuming Quotes table has 'quote_id' as primary key
+);
+
+CREATE TABLE Orders (
+    Order_ID INT AUTO_INCREMENT PRIMARY KEY,   -- Auto-generated Order ID
+    Quote_ID INT,                               -- Foreign Key referencing the Quotes table
+    Price DECIMAL(10, 2),                       -- Price with up to 10 digits and 2 decimals
+    Start_Date DATE,                            -- Start date of the order
+    End_Date DATE,                              -- End date of the order
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the order is generated (default to current time)
+    Status ENUM('work in progress', 'completed'), -- Status of the order (work in progress, completed)
+    FOREIGN KEY (Quote_ID) REFERENCES Quotes(Quote_ID) -- Foreign key constraint on Quote_ID referencing the Quotes table
+);
+
+CREATE TABLE Bills (
+    BillID INT AUTO_INCREMENT PRIMARY KEY, -- Unique identifier for each bill
+    Order_ID INT NOT NULL,                  -- Foreign key referencing OrderID in work_orders
+    Price DECIMAL(10, 2) NOT NULL,         -- Price, matching the structure in work_orders
+    Status ENUM('Generated', 'Paid', 'Dispute') DEFAULT 'Generated',          -- Status of the bill
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- Timestamp for when the order is created or updated
+    Payment_date TIMESTAMP,
+    Due_Date DATE,-- Timestamp
+    FOREIGN KEY (Order_ID) REFERENCES Orders(Order_ID) ON DELETE CASCADE  -- Establish foreign key relationship
+);
+
+CREATE TABLE BillNegotiation (
+    sl_no INT AUTO_INCREMENT PRIMARY KEY,        -- Auto-incrementing primary key (Sl. No)
+    note_message TEXT NOT NULL,           -- Note/Message Details (can be of variable length)
+    BillID INT,                                -- Foreign key (Quote ID)
+    sender VARCHAR(255) NOT NULL,                 -- Sender of the message (e.g., User, Admin, etc.)
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, --(auto-generated on insert)
+    FOREIGN KEY (BillID) REFERENCES Bills(BillID) -- Assuming Quotes table has 'quote_id' as primary key
+);
+
+__________________________________________________
+All the queries we have used in the project and all details on what these queries are doing is in dbservice.js file:
+
+SELECT * FROM users WHERE email = ?
+
+INSERT INTO users (user_id, first_name, last_name, email, password, address, card_name, card_number, expiry_date, cvv, phone_number, created_at) VALUES (UUID(),?, ?, ?, ?, ?,?,?,?,?,?,CURRENT_TIMESTAMP)
+
+UPDATE users SET password = ? WHERE email = ?;
+
+SELECT * FROM SubmitRequest
+
+SELECT q.Quote_ID, q.Price, q.Start_Period, q.End_Period, q.Status, sr.Submitrequest_ID FROM Quotes q JOIN SubmitRequest sr ON q.Submitrequest_ID = sr.Submitrequest_ID WHERE sr.user_id = ?
+
+SELECT * FROM SubmitRequest where user_id=?
+
+SELECT * FROM BillNegotiation WHERE BillID = ? ORDER BY timestamp ASC;
+
+UPDATE SubmitRequest SET Note_from_contractor = ?, Tracking_Status = 'Rejected' WHERE Submitrequest_ID = ?;
+
+INSERT INTO SubmitRequest (Address, Square_Feet, Price_Dollars, Driveway_Pictures, Note, Tracking_Status, user_id) VALUES (?,?,?,?,?,?,?)
+
+INSERT INTO Quotes (Price, Start_Period, End_Period, Submitrequest_ID) values (?,?,?,?);
+
+UPDATE SubmitRequest SET Tracking_Status = 'Accepted' WHERE Submitrequest_ID = ?;
+
+SELECT * FROM Quotes
+
+SELECT * FROM Bills
+
+SELECT Bills.BillID,Bills.Price AS Bill_Price,Bills.Status AS Bill_Status,Bills.Timestamp AS Bill_Timestamp,Bills.Payment_date,Bills.Due_Date,Orders.Order_ID FROM Bills JOIN Orders ON Bills.Order_ID = Orders.Order_ID JOIN Quotes ON Orders.Quote_ID = Quotes.Quote_ID JOIN SubmitRequest ON Quotes.Submitrequest_ID = SubmitRequest.Submitrequest_ID JOIN users ON SubmitRequest.user_id = users.user_id WHERE users.user_id = ? ORDER BY Bills.Timestamp DESC;
+
+UPDATE Quotes SET Price = ?, Start_Period = ?, End_Period = ?, Timestamp=CURRENT_TIMESTAMP WHERE Quote_ID = ?;
+
+UPDATE Bills SET Price = ? WHERE BillID = ?;
+
+UPDATE Bills SET Status = ?, Payment_date = CURRENT_TIMESTAMP WHERE BillID = ?;
+
+UPDATE Quotes SET  Status = ? WHERE Quote_ID = ?;
+
+INSERT INTO Orders (Quote_ID, Price, Start_Date, End_Date, Status) VALUES (?, ?, ?, ?, ?);
+
+UPDATE Bills SET  Status = ? WHERE BillID = ?;
+
+UPDATE Quotes SET  Status = ? WHERE Quote_ID = ?;
+
+INSERT INTO QuoteNegotiation (note_message_details, quote_id, sender) VALUES (?,?,?);
+
+INSERT INTO BillNegotiation (note_message, BillID,  sender) VALUES (?,?,?);
+
+INSERT INTO BillNegotiation (note_message, BillID,  sender) VALUES (?,?,?)
+
+INSERT INTO QuoteNegotiation (note_message_details, quote_id, sender) VALUES (?,?,?)
+
+SELECT * FROM QuoteNegotiation WHERE quote_id = ? ORDER BY timestamp ASC
+
+SELECT * FROM Orders
+
+SELECT o.Order_ID, o.Quote_Id, o.Price, o.start_Date, o.End_Date, o.status FROM Orders o JOIN Quotes q ON o.Quote_ID = q.Quote_ID JOIN SubmitRequest sr ON q.Submitrequest_ID = sr.Submitrequest_ID JOIN users u ON sr.user_id = u.user_id WHERE u.user_id = ?
+
+UPDATE Orders SET  Status = ? WHERE Order_ID = ?;
+
+INSERT INTO Bills (Order_ID, Price, Status, Payment_date, Due_Date) VALUES (?, ?, ?, NULL, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY))
+______________________________________
+DashBoard Queries:
+
+Big Clients:
+
+SELECT u.email, u.first_name, u.last_name, COUNT(o.Order_ID) AS TotalCompletedOrders FROM submitrequest sr JOIN Quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID JOIN Orders o ON q.Quote_ID = o.Quote_ID JOIN users u ON sr.user_id = u.user_id WHERE o.Status = 'completed' GROUP BY u.user_id HAVING COUNT(o.Order_ID) = (SELECT MAX(TotalCompletedOrders) FROM (SELECT COUNT(o.Order_ID) AS TotalCompletedOrders FROM submitrequest sr JOIN Quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID JOIN Orders o ON q.Quote_ID = o.Quote_ID WHERE o.Status = 'completed' GROUP BY sr.user_id) AS Subquery);
+
+Difficult clients:
+
+SELECT u.user_id, u.email, u.first_name, u.last_name FROM users u JOIN submitrequest sr ON u.user_id = sr.user_id LEFT JOIN quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID LEFT JOIN orders o ON q.Quote_ID = o.Quote_ID WHERE sr.user_id IN (SELECT sr.user_id FROM submitrequest sr JOIN quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID WHERE q.Status IN ('Sent') GROUP BY sr.user_id HAVING COUNT(DISTINCT sr.Submitrequest_ID) >= 3) AND o.Order_ID IS NULL GROUP BY u.user_id;
+
+This month Quotes: 
+
+SELECT Quote_ID, Price, Start_Period, End_Period, Submitrequest_ID, Status, Timestamp FROM Quotes WHERE Status = 'Accepted' AND YEAR(Start_Period) = YEAR(CURDATE()) AND MONTH(Start_Period) = MONTH(CURDATE());
+
+Prospective Clients: 
+
+SELECT u.user_id, u.first_name, u.last_name, u.email FROM users u LEFT JOIN submitrequest sr ON u.user_id = sr.user_id WHERE sr.Submitrequest_ID IS NULL;
+
+Largest Driveway: 
+
+SELECT sr.Address, sr.Square_Feet FROM SubmitRequest sr JOIN Quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID JOIN Orders o ON q.Quote_ID = o.Quote_ID WHERE sr.Square_Feet = (SELECT MAX(sr2.Square_Feet) FROM SubmitRequest sr2 JOIN Quotes q2 ON sr2.Submitrequest_ID = q2.Submitrequest_ID JOIN Orders o2 ON q2.Quote_ID = o2.Quote_ID);
+
+Overdue Bills: 
+
+SELECT BillID, Order_ID, Price, Status, Timestamp, Payment_date, Due_Date FROM Bills WHERE (Payment_date > Due_Date OR (Payment_date IS NULL AND CURDATE() > Due_Date));
+
+Bad Clients:
+
+SELECT u.user_id, u.first_name, u.last_name, u.email FROM users u JOIN SubmitRequest sr ON u.user_id = sr.user_id JOIN Quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID JOIN Orders o ON q.Quote_ID = o.Quote_ID JOIN Bills b ON o.Order_ID = b.Order_ID GROUP BY u.user_id, u.first_name, u.last_name, u.email HAVING COUNT(CASE WHEN b.Payment_date IS NULL AND b.Due_Date < CURDATE() THEN 1 END) = COUNT(b.BillID);
+
+Good Clients: 
+
+SELECT u.user_id, u.first_name, u.last_name, u.email FROM users u JOIN SubmitRequest sr ON u.user_id = sr.user_id JOIN Quotes q ON sr.Submitrequest_ID = q.Submitrequest_ID JOIN Orders o ON q.Quote_ID = o.Quote_ID JOIN Bills b ON o.Order_ID = b.Order_ID WHERE b.Payment_date IS NOT NULL AND TIMESTAMPDIFF(HOUR, b.Timestamp, b.Payment_date) <= 24 GROUP BY u.user_id, u.first_name, u.last_name;

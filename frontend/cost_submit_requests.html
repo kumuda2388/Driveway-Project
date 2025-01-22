@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>submit requests</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cost_submit_requests.js" defer></script> <!-- External JavaScript -->
+</head>
+<body>
+  <div class="container">
+  <header>
+    <button id="move_back" onclick="window.location.href='home_customer.html'">Back</button></header>
+    <br><br>
+    <button id="raise_request">Submit new request</button>
+    <br><br>
+    <div class="form-container">
+        <h2>Add Property Details</h2>
+        <div class="form-container">
+        <form id="propertyForm" style="display: none;">
+          
+          <!-- Address -->
+          <label for="address">Address:</label>
+          <textarea id="address" name="address" rows="4" required></textarea>
+            <br><br>
+          <!-- Square Feet -->
+          <label for="squareFeet">Square Feet:</label>
+          <input type="number" id="squareFeet" name="squareFeet" required>
+          <br><br>
+          <!-- Dollars -->
+          <label for="price">Price (in Dollars):</label>
+          <input type="number" id="price" name="price" required>
+          <br><br>
+          <!-- Note -->
+          <label for="note">Note:</label>
+          <textarea id="note" name="note" rows="4" required></textarea>
+          <br><br>
+          <!-- Picture Uploads -->
+          <label for="pictures">Upload Pictures (5 pictures max):</label>
+          <br><br>
+          <input type="file" id="picture1" name="pictures" accept="image/*" required style="margin: 5px 0;"><br><br>
+    <input type="file" id="picture2" name="pictures" accept="image/*" required style="margin: 5px 0;"><br><br>
+    <input type="file" id="picture3" name="pictures" accept="image/*" required style="margin: 5px 0;"><br><br>
+    <input type="file" id="picture4" name="pictures" accept="image/*" required style="margin: 5px 0;"><br><br>
+    <input type="file" id="picture5" name="pictures" accept="image/*" required style="margin: 5px 0;"><br><br>
+          <!-- Submit Button -->
+          <button type="submit" class="submit-btn">Submit</button>
+          <br><br>
+        </form>
+        </div>
+    <br><br>
+    <table id="table">
+        <thead>
+            <th>Submit request ID</th>
+            <th>Address</th>
+            <th>Square feet</th>
+            <th>Price</th>
+            <th>Pictures</th>
+            <th>Notes</th>
+            <th>Tracking status</th>
+            <th>user ID</th>
+            <th>note from contractor</th>
+        </thead>
+        <tbody>
+      </tbody>
+    </div>
+</body>
+</html>

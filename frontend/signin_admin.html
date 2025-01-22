@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS if necessary -->
+    <script src="signin_admin.js" defer></script> <!-- External JavaScript -->
+</head>
+<body>
+    <div class="container">
+    <header>
+    <button id="move_back" onclick="window.location.href='index.html'">Back</button></header>
+    <h2>Admin Sign In</h2><br><br>
+    <div class="form-container">
+    <form id="signin-admin">
+        <!-- Email Field -->
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email" />
+            <br><br>
+        <!-- Password Field -->
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required placeholder="Enter your password" />
+            <br><br>
+        <!-- Submit Button -->
+        <button type="submit">Login</button>
+    </form>
+    </div>
+</div>
+</body>
+</html>

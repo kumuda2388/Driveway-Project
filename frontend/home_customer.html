@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="home_customer.js" defer></script> <!-- External JavaScript -->
+</head>
+<body>
+    <div class="container">
+    <!-- Link to logout (which would clear session data or redirect to login in a real app) -->
+     <header>
+    <button id="logoutBtn">Logout</button></header>
+    <br><br>
+        <!-- Other buttons with inline navigation -->
+        <button id="submit_requests" onclick="window.location.href='cost_submit_requests.html'">Submit Requests</button>
+        <br><br>
+        <button id="quotes_generated" onclick="window.location.href='cost_quotes_generated.html'">Quotes Generated</button>
+        <br><br>
+        <button id="orders_generated" onclick="window.location.href='cost_orders_generated.html'">Orders Generated</button>
+        <br><br>
+        <button id="bills_generated" onclick="window.location.href='cost_bills_generated.html'">Bills Generated</button>
+        <br><br>
+    </div>
+</body>
+</html>

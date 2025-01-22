@@ -1,0 +1,123 @@
+/* Reset margin and padding for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Apply some basic styles to the body */
+body {
+    font-family: Arial, sans-serif; /* Set a basic font */
+    min-height: 100vh; /* Ensure the body takes at least full height of the viewport */
+    display: flex; /* Use Flexbox for layout */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align elements horizontally */
+    justify-content: flex-start; /* Align elements to the top */
+    background-color: #f4f4f4; /* Light background color */
+    padding: 20px; /* Add some padding to ensure the content doesn't stick to edges */
+}
+
+/* Centering the container div */
+.container {
+    width: 100%; /* Ensure the container takes up the full width */
+    max-width: 1200px; /* Optional: set a max-width to prevent it from becoming too wide */
+    text-align: center; /* Align the buttons and content in the center */
+    margin-top: 30px; /* Add some spacing at the top */
+}
+
+/* Style the header to be positioned at the top-left corner */
+header {
+    position: absolute;
+    top: 20px; /* Distance from the top */
+    left: 20px; /* Distance from the left */
+}
+
+/* Style for the buttons inside the container */
+button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the buttons */
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduce padding for smaller screens */
+        justify-content: flex-start; /* Align to the top */
+    }
+
+    .container {
+        width: 100%; /* Full width for container on small screens */
+    }
+
+    button {
+        width: 100%; /* Make buttons full-width on smaller screens */
+        padding: 12px; /* Make buttons bigger */
+    }
+
+    table {
+        width: 100%; /* Full width for table */
+        font-size: 14px; /* Reduce font size for smaller screens */
+    }
+
+    th, td {
+        padding: 8px; /* Reduce padding in table cells */
+    }
+}
+
+/* Styling the table */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures table borders collapse into one */
+    margin-top: 20px; /* Add space between table and other content */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Adds a border to both th and td */
+    padding: 10px;           /* Adds padding inside cells */
+    text-align: left;        /* Aligns text to the left */
+}
+
+th {
+    background-color: #f2f2f2; /* Light gray background for header cells */
+    font-weight: bold;         /* Makes the text in header bold */
+}
+
+td {
+    background-color: #fff; /* White background for data cells */
+}
+
+tr:nth-child(even) td {
+    background-color: #f9f9f9; /* Light gray rows for even rows */
+}
+
+tr:hover {
+    background-color: #e0e0e0; /* Highlights row on hover */
+}
+
+/* Disabled button style */
+button:disabled {
+    background-color: #b0c4de; /* Lighter blue when disabled */
+    color: #d3d3d3; /* Lighter text color */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    opacity: 0.7; /* Make the button slightly transparent */
+}
+
+caption {
+    font-size: 30px;   /* Increases the font size */
+    font-weight: bold; /* Makes the text bold */
+    text-align: center; /* Centers the caption text */
+    margin-bottom: 10px; /* Adds space below the caption */
+    color: #333; /* You can choose a color that suits your design */
+}
