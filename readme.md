@@ -1,32 +1,153 @@
-The base URL / start point of the project website: http://localhost/Driveway_Project/frontend/index.html
+# Driveway Project
 
-All the backend files are present under backend folder of the project and front end files are present in frontend folder of the project.
+## Overview
 
-App.js under backend folder has all calls to the backend server and dbservice.js has all the database queries queries details.
+The Driveway Project is a full-stack web application that enables customers to submit service requests and contractors to manage quotes, bills, and orders.
 
-In the backend folder of the project run below commands to install all necessary packages:
+The system is built using:
+
+- HTML
+- CSS
+- JavaScript
+- Node.js
+- Express.js
+- MySQL
+
+The project is structured with a clear separation between frontend and backend components.
+
+---
+
+## Base URL
+
+Start point of the website:
+
+http://localhost/Driveway_Project/frontend/index.html
+
+---
+
+## Project Structure
+
+Driveway_Project  
+│  
+├── frontend/   → Contains all HTML, CSS, and frontend JavaScript files  
+├── backend/    → Contains server logic, API routes, and database queries  
+
+Important Backend Files:
+
+- app.js → Contains backend server setup and API calls  
+- dbservice.js → Contains all MySQL database queries  
+
+---
+
+## Backend Setup
+
+### Step 1: Navigate to Backend Folder
+
+```bash
+cd backend
+```
+
+---
+
+### Step 2: Initialize Node Project
+
+```bash
 npm init -y
+```
+
+---
+
+### Step 3: Install Required Packages
+
+```bash
 npm install express mysql cors nodemon dotenv
 npm install express-session
 npm install bcrypt
+```
 
-Do the below changes in package.json file so that changes of the website are dynamically reflected.
+Package usage:
+
+- express → Backend server framework  
+- mysql → MySQL database connection  
+- cors → Enable cross-origin requests  
+- nodemon → Auto-restart server on file changes  
+- dotenv → Manage environment variables  
+- express-session → Session handling  
+- bcrypt → Password hashing for security  
+
+---
+
+## Update package.json
+
+Modify the package.json file to include the following under scripts:
+
+```json
 "start": "nodemon app.js"
-in package.json file
+```
 
-To start the server go to backend folder of this project in your terminal and run the following command:
+This ensures the server automatically refreshes when changes are made.
+
+---
+
+## Start the Backend Server
+
+From the backend folder, run:
+
+```bash
 npm start
+```
 
-Contributions:
+The server will start and dynamically reflect changes.
 
-I Kumuda Krishnappa and Nikila Choppa collaborated closely on this project, and here’s a summary of our contributions:
+---
 
-We jointly designed the necessary tables, determining what data was required and what could be excluded. 
+## Technologies Used
 
-While I handled the creation of submit requests, quotes, bills, and orders on the customer side and Nikila worked on the same features for the contractor side (David).
+Frontend:
+- HTML
+- CSS
+- JavaScript
 
-Both of us worked together on the queries for the dashboard and its overall creation.
+Backend:
+- Node.js
+- Express.js
+- MySQL
 
-Throughout the project, we coordinated effectively, discussing issues, troubleshooting challenges, and supporting each other whenever we encountered difficulties. If we were unable to resolve an issue on our own, we worked together to find a solution.
+Security:
+- bcrypt for password hashing
+- express-session for session management
 
-While we each focused on our individual tasks, we also collaborated on certain components and ensured that all parts of the project were integrated and functioning smoothly.
+---
+
+## Features
+
+Customer Side:
+- Submit service requests
+- Generate quotes
+- View bills
+- Manage orders
+
+Contractor Side:
+- Review service requests
+- Create and manage quotes
+- Generate bills
+- Manage customer orders
+- Dashboard overview
+
+Dashboard:
+- Displays key system data
+- Includes integrated database queries
+- Built collaboratively
+---
+
+## Project Status
+
+The application runs locally and demonstrates:
+
+- Structured frontend-backend integration  
+- Database-driven dynamic functionality  
+- Secure authentication using bcrypt  
+- Session management using express-session  
+- Dynamic server updates using nodemon  
+
+The system is designed as a scalable foundation for future enhancements.
